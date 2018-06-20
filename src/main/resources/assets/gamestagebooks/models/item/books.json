@@ -1,0 +1,7 @@
+{
+  "parent": "builtin/generated",
+  "textures": {
+    "layer0": "gamestagebooks:items/book",
+    "layer1": "gamestagebooks:items/book_overlay"
+  }
+}

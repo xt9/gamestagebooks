@@ -1,0 +1,14 @@
+[{
+  "modid": "gamestagebooks",
+  "name": "Gamestage Books",
+  "description": "Books that unlock gamestages when read.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["xt9 (IterationFunk)"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}]
