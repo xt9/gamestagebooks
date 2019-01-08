@@ -2,10 +2,7 @@ package xt9.gamestagebooks.common.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
-import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import xt9.gamestagebooks.common.item.ItemStageBook;

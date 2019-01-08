@@ -1,7 +1,6 @@
 package xt9.gamestagebooks;
 
 import crafttweaker.CraftTweakerAPI;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,7 @@ import xt9.gamestagebooks.common.network.UnlockGamestageMessage;
 /**
  * Created by xt9 on 2018-05-23.
  */
-@Mod(modid = ModConstants.MODID, version = ModConstants.VERSION, useMetadata = true, dependencies = "required-after:bookshelf;required-after:gamestages", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(modid = ModConstants.MODID, version = ModConstants.VERSION, useMetadata = true, dependencies = "required-after:bookshelf@[1.12-2.3.569,);required-after:gamestages@[1.12-2.0.112,)", acceptedMinecraftVersions = "[1.12,1.12.2]")
 @Mod.EventBusSubscriber
 public class GamestageBooks {
 

@@ -1,10 +1,9 @@
 package xt9.gamestagebooks.common.item;
 
-import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
-import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.command.ICommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -17,6 +16,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import xt9.gamestagebooks.GamestageBooks;
 import xt9.gamestagebooks.ModConstants;
+import xt9.gamestagebooks.common.commands.Sender;
 import xt9.gamestagebooks.common.network.UnlockGamestageMessage;
 
 import javax.annotation.Nullable;
@@ -78,10 +78,11 @@ public class ItemStageBook extends ItemBase {
         IStageData data = GameStageSaveHandler.getPlayerData(player.getUniqueID());
         ItemStageBook itemBook = (ItemStageBook) book.getItem();
 
-        if(!data.hasStage(itemBook.getStageName())) {
-            data.addStage(itemBook.getStageName());
+        if(!data.hasStage(itemBook.getStageName()) && player.getServer() != null) {
+            ICommandManager man = player.getServer().getCommandManager();
+            man.executeCommand(new Sender(player), "gamestage silentadd @p " + itemBook.getStageName());
+
             book.shrink(1);
-            GameStages.NETWORK.sendTo(new PacketSyncClient(data.getStages()), player);
             GamestageBooks.network.sendTo(new UnlockGamestageMessage(itemBook.getStageHumanReadable(), itemBook.getUnlockItemName()), player);
             player.getServerWorld().playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_VILLAGER_AMBIENT, SoundCategory.MASTER, 1.3F, 1.0F);
             player.getServerWorld().playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 2.0F, 1.0F);
