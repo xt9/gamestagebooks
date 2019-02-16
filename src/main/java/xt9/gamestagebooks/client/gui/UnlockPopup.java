@@ -44,7 +44,7 @@ public class UnlockPopup extends GuiScreen {
 
         Item item = Item.getByNameOrId(parts[0]);
         if(item == null) {
-            item = Items.STICK;
+            item = Items.AIR;
         }
 
         try {
@@ -145,6 +145,10 @@ public class UnlockPopup extends GuiScreen {
     }
 
     private void drawItemStack(int x, int y, ItemStack stack, float scale) {
+        if(messageItem == null) {
+            messageItem = new ItemStack(Items.AIR, 1, 0);
+        }
+
         RenderHelper.enableGUIStandardItemLighting();
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -154,7 +158,9 @@ public class UnlockPopup extends GuiScreen {
         GL11.glScalef(scale, scale, scale);
         this.zLevel = 200.0F;
         itemRender.zLevel = 200.0F;
-        itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        if(messageItem != null) {
+            itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        }
         this.zLevel = 0.0F;
         itemRender.zLevel = 0.0F;
         GL11.glScalef(1.0F, 1.0F, 1.0F);
