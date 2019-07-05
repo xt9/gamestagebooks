@@ -80,7 +80,7 @@ public class ItemStageBook extends ItemBase {
 
         if(!data.hasStage(itemBook.getStageName()) && player.getServer() != null) {
             ICommandManager man = player.getServer().getCommandManager();
-            man.executeCommand(new Sender(player), "gamestage silentadd @p " + itemBook.getStageName());
+            man.executeCommand(new Sender(player), "gamestage silentadd " + player.getName() + " " + itemBook.getStageName());
 
             book.shrink(1);
             GamestageBooks.network.sendTo(new UnlockGamestageMessage(itemBook.getStageHumanReadable(), itemBook.getUnlockItemName()), player);
