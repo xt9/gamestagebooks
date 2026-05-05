@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,7 +22,6 @@ import org.lwjgl.opengl.GL11;
  */
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class UnlockPopup extends GuiScreen {
-    private FontRenderer fontRender;
     private Minecraft minecraft;
     private static String message = "";
     private static ItemStack messageItem;
@@ -31,8 +31,6 @@ public class UnlockPopup extends GuiScreen {
     public UnlockPopup(Minecraft mc) {
         super();
         minecraft = mc;
-        fontRender = mc.fontRenderer;
-        this.itemRender = minecraft.getRenderItem();
         setGuiSize(89, 12);
     }
 
@@ -78,7 +76,7 @@ public class UnlockPopup extends GuiScreen {
         float itemScale = 2.7F;
 
         int itemX = getScreenCenterX(itemScale) - 8;
-        drawItemStack(itemX, 10, messageItem, itemScale);
+        drawItemStack(itemX, 10, itemScale);
 
         float scale1 = 1.9F;
         float scale2 = 1.1F;
@@ -108,7 +106,7 @@ public class UnlockPopup extends GuiScreen {
     private void renderScaledStringWithColor(float scale, int x, int y, String text, int color) {
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, scale);
-        drawString(fontRender, text, x, (int) (y / scale), color);
+        drawString(Minecraft.getMinecraft().fontRenderer, text, x, (int) (y / scale), color);
         GL11.glScalef(1.0F, 1.0F, 1.0F);
         GL11.glPopMatrix();
     }
@@ -117,17 +115,8 @@ public class UnlockPopup extends GuiScreen {
         renderScaledStringWithColor(scale, x, y, text, 0xFFFFFF);
     }
 
-    private int getItemHalfWidth(float glScale) {
-        return (int) (((16 / 2) * glScale) / glScale);
-    }
-
     private int getHalfLineWidth(String text, float glScale) {
-        return (int) (((fontRender.getStringWidth(text) / 2) * glScale) / glScale);
-    }
-
-    private int getScreenCenterX() {
-        ScaledResolution scaledResolution = new ScaledResolution(minecraft);
-        return scaledResolution.getScaledWidth() / 2;
+        return (int) (((Minecraft.getMinecraft().fontRenderer.getStringWidth(text) / 2) * glScale) / glScale);
     }
 
     private int getScreenCenterX(float glScale) {
@@ -135,37 +124,36 @@ public class UnlockPopup extends GuiScreen {
         return (int) ((scaledResolution.getScaledWidth() / 2) / glScale);
     }
 
-    private int getLeftCornerX() {
-        return 5;
-    }
+    private void drawItemStack(int x, int y, float scale) {
+        RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+        if (itemRender == null) {
+            return;
+        }
 
-    private int getRightCornerX() {
-        ScaledResolution scaledResolution = new ScaledResolution(minecraft);
-        return scaledResolution.getScaledWidth() - width - 5;
-    }
-
-    private void drawItemStack(int x, int y, ItemStack stack, float scale) {
-        if(messageItem == null) {
+        if (messageItem == null) {
             messageItem = new ItemStack(Items.AIR, 1, 0);
         }
 
         RenderHelper.enableGUIStandardItemLighting();
 
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.translate(0.0F, 0.0F, 32.0F);
+        GlStateManager.pushMatrix();
 
-        GL11.glPushMatrix();
-        GL11.glScalef(scale, scale, scale);
-        this.zLevel = 200.0F;
-        itemRender.zLevel = 200.0F;
-        if(messageItem != null) {
-            itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        try {
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            GlStateManager.translate(0F, 0F, 32F);
+            GlStateManager.scale(scale, scale, scale);
+
+            this.zLevel = 200F;
+            itemRender.zLevel = 200F;
+
+            itemRender.renderItemAndEffectIntoGUI(messageItem, x, y);
+        } finally {
+            this.zLevel = 0F;
+            itemRender.zLevel = 0F;
+
+            GlStateManager.popMatrix();
+
+            RenderHelper.disableStandardItemLighting();
         }
-        this.zLevel = 0.0F;
-        itemRender.zLevel = 0.0F;
-        GL11.glScalef(1.0F, 1.0F, 1.0F);
-        GL11.glPopMatrix();
-
-        RenderHelper.disableStandardItemLighting();
     }
 }
